@@ -1,0 +1,217 @@
+---
+title: Single data frame Operations
+author: R package build
+date: '2022-02-14'
+slug: single-data-frame-operations
+categories: []
+tags: []
+---
+
+## Call libraries
+```{r}
+library(tidyverse)
+```
+
+```{r}
+url <- 'https://raw.githubusercontent.com/gnunez2020/tidyverse/main/hotels.csv'
+hotels <- read.csv(url)
+names(hotels)
+```
+
+##Select
+
+### Select to include
+
+```{r}
+hotels %>%
+  select(hotel, lead_time)
+```
+
+### Select to exclude
+
+```{r}
+hotels %>%
+  select(-agent)
+```
+
+### Select a range
+```{r}
+hotels %>%
+  select(hotel:arrival_date_month)
+
+hotels %>%
+  select(ends_with("type"))
+```
+
+### Select a characteristic
+
+```{r}
+hotels %>%
+  select(starts_with("arrival"))
+```
+
+### Select ascending/decending
+
+```{r}
+
+hotels %>%
+  select(adults, children, babies) %>%
+  arrange(babies)
+
+hotels %>%
+  select(adults, children, babies) %>%
+  arrange(desc(babies))
+```
+
+## Slice 
+
+###Slice for first five rows
+
+```{r}
+hotels %>%
+  slice(1:5)
+```
+
+## Filter
+
+### Filter for subset of rows
+```{r}
+hotels %>%
+  filter(hotel == "City Hotel")
+```
+
+### Filter for many conditions
+
+```{r}
+hotels %>%
+  filter( 
+    adults == 0,
+    children >= 1
+    ) %>% 
+  select(adults, babies, children)
+```
+### Filter for complex conditions
+
+```{r}
+hotels %>%
+  filter( 
+    adults == 0,     
+    children >= 1 | babies >= 1     # | means or
+    ) %>%
+  select(adults, babies, children)
+```
+
+## Distinct and Count
+
+### Distinct to filter for unique rows
+```{r}
+hotels %>% 
+  distinct(hotel, market_segment) %>%
+  arrange(hotel, market_segment)
+```
+
+### Count to create frequency tables and arrange
+
+```{r}
+
+# alphabetical order by default
+hotels %>%
+  count(market_segment) %>%
+  arrange(n)
+
+# descending frequency order
+hotels %>%
+  count(market_segment, sort = TRUE) %>%
+  arrange(desc(n))
+```
+
+### Count for multiple variables
+
+```{r}
+hotels %>%
+  count(hotel, market_segment)
+```
+
+### order matters when you count
+
+```{r}
+# hotel type first
+hotels %>%
+  count(hotel, market_segment)
+
+# market segment first
+hotels %>%
+  count(market_segment, hotel)
+```
+
+## Mutate
+
+### Mutate to add a new variable
+
+```{r}
+hotels %>%
+  mutate(little_ones = children + babies) %>%
+  select(children, babies, little_ones) %>%
+  arrange(desc(little_ones))
+
+# Resort Hotel
+hotels %>%
+  mutate(little_ones = children + babies) %>%
+  filter(
+    little_ones >= 1,
+    hotel == "Resort Hotel"
+    ) %>%
+  select(hotel, little_ones)
+
+# City Hotel
+hotels %>%
+  mutate(little_ones = children + babies) %>%
+  filter(
+    little_ones >= 1,
+    hotel == "City Hotel"
+    )  %>%
+  select(hotel, little_ones)
+```
+
+## Summarise and Group_by
+
+### Summarise for summary stats
+
+```{r}
+# mean average daily rate for all bookings
+hotels %>%
+  summarise(mean_adr = mean(adr))
+```
+### Group_by for grouped operations
+
+```{r}
+# mean average daily rate for all booking at city and resort hotels
+hotels %>%
+  group_by(hotel) %>%
+  summarise(mean_adr = mean(adr))
+```
+
+### Calculating frequencies
+```{r}
+# The following two give the same result, so count is simply short for group_by then determine frequencies
+
+hotels %>%
+  group_by(hotel) %>%
+  summarise(n = n())
+
+hotels %>%
+  count(hotel)
+```
+
+### Multiple summary statistics
+
+```{r}
+hotels %>%
+  summarise(
+    min_adr = min(adr),
+    mean_adr = mean(adr),
+    median_adr = median(adr),
+    max_adr = max(adr)
+    )
+```
+
