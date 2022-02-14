@@ -14,7 +14,7 @@ library(tidyverse)
 
 ```{r}
 url <- 'https://raw.githubusercontent.com/gnunez2020/tidyverse/main/hotels.csv'
-hotels <- read.csv(url)
+hotels <- read_csv(url)
 names(hotels)
 ```
 
