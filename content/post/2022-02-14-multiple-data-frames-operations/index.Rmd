@@ -1,0 +1,193 @@
+---
+title: Multiple data frames Operations
+author: R package build
+date: '2022-02-14'
+slug: multiple-data-frames-operations
+categories: []
+tags: []
+---
+## Import file from GitHub
+
+## Call libraries
+```{r}
+library(tidyverse)
+library(readr)
+```
+
+```{r}
+url1 <- 'https://raw.githubusercontent.com/gnunez2020/tidyverse/main/professions.csv'
+professions <- read_csv(url1)
+names(professions)
+```
+
+```{r}
+url2 <- 'https://raw.githubusercontent.com/gnunez2020/tidyverse/main/dates.csv'
+dates <- read_csv(url2)
+names(dates)
+```
+
+```{r}
+url3 <- 'https://raw.githubusercontent.com/gnunez2020/tidyverse/main/works.csv'
+works <- read_csv(url3)
+names(works)
+```
+
+
+
+## Inputs
+
+```{r}
+names(professions)
+nrow(professions)
+```
+
+```{r}
+names(dates)
+nrow(dates)
+```
+
+```{r}
+names(works)
+nrow(works)
+```
+
+## Joining data frames
+
+```{r}
+# something_join(x, y)
+```
+
+### Left Join
+
+```{r}
+# left_join(x, y)
+```
+
+```{r}
+professions %>%
+  left_join(dates)
+```
+
+### Right Join
+
+```{r}
+# right_join(x, y)
+```
+
+```{r}
+professions %>%
+  right_join(dates)
+```
+
+### Full Join
+
+```{r}
+# full_join(x, y)
+```
+
+```{r}
+dates %>%
+  full_join(works)
+```
+
+### Inner Join
+
+```{r}
+# inner_join(x, y)
+```
+
+```{r}
+dates %>%
+  inner_join(works)
+```
+
+### Semi Join
+
+```{r}
+# semi_join(x, y)
+```
+
+```{r}
+dates %>%
+  semi_join(works)
+```
+
+### Anti Join
+
+```{r}
+# anti_join(x, y)
+```
+
+```{r}
+dates %>%
+  anti_join(works)
+```
+
+### Putting it altogether
+
+```{r}
+professions %>%
+  left_join(dates) %>%
+  left_join(works)
+```
+
+## Case Study: Student records
+```{r}
+url4 <- 'https://raw.githubusercontent.com/gnunez2020/tidyverse/main/enrolment.csv'
+enrolment <- read_csv(url4)
+names(enrolment)
+```
+
+```{r}
+url5 <- 'https://raw.githubusercontent.com/gnunez2020/tidyverse/main/survey.csv'
+survey <- read_csv(url5)
+names(survey)
+```
+
+```{r}
+# In Class
+enrolment %>% 
+  left_join(survey, by = "id")
+```
+
+```{r}
+# Survey Missing
+enrolment %>% 
+  anti_join(survey, by = "id")
+```
+
+```{r}
+# Dropped
+survey %>% 
+  anti_join(enrolment, by = "id")
+```
+
+## Case study: Grocery sales
+
+```{r}
+url6 <- 'https://raw.githubusercontent.com/gnunez2020/tidyverse/main/purchases.csv'
+purchases <- read_csv(url6)
+names(purchases)
+```
+
+```{r}
+url7 <- 'https://raw.githubusercontent.com/gnunez2020/tidyverse/main/prices.csv'
+prices <- read_csv(url7)
+names(prices)
+```
+
+```{r}
+# Total Revenue
+purchases %>% 
+  left_join(prices) %>%
+  summarise(total_revenue = sum(price))
+```
+
+```{r}
+# Revenue per Customer
+purchases %>% 
+  left_join(prices) %>%
+  group_by(customer_id) %>%
+  summarise(total_revenue = sum(price))
+```
+

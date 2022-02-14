@@ -12,12 +12,6 @@ tags: []
 library(tidyverse)
 ```
 
-```{r}
-url <- 'https://raw.githubusercontent.com/gnunez2020/tidyverse/main/hotels.csv'
-hotels <- read_csv(url)
-names(hotels)
-```
-
 ##Select
 
 ### Select to include
