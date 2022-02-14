@@ -1,0 +1,141 @@
+---
+title: Tidying data
+author: R package build
+date: '2022-02-14'
+slug: tidying-data
+categories: []
+tags: []
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+
+<div id="import-file-from-github" class="section level2">
+<h2>Import file from GitHub</h2>
+</div>
+<div id="call-libraries" class="section level2">
+<h2>Call libraries</h2>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
+## ✓ tibble  3.1.6     ✓ dplyr   1.0.8
+## ✓ tidyr   1.2.0     ✓ stringr 1.4.0
+## ✓ readr   2.1.2     ✓ forcats 0.5.1</code></pre>
+<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>url6 &lt;- &#39;https://raw.githubusercontent.com/gnunez2020/tidyverse/main/purchases.csv&#39;
+purchases &lt;- read_csv(url6)</code></pre>
+<pre><code>## Rows: 5 Columns: 2
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (1): item
+## dbl (1): customer_id
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>names(purchases)</code></pre>
+<pre><code>## [1] &quot;customer_id&quot; &quot;item&quot;</code></pre>
+</div>
+<div id="pivot-longer" class="section level2">
+<h2>Pivot Longer</h2>
+<pre class="r"><code>#pivot_longer(data, cols, names_to = &quot;name&quot;, values_to = &quot;value&quot;)</code></pre>
+<pre class="r"><code> #purchases &lt;- customers %&gt;%
+ # pivot_longer(
+ #   cols = item_1:item_3,  # variables item_1 to item_3
+ #   names_to = &quot;item_no&quot;,  # column names -&gt; new column called item_no
+ #   values_to = &quot;item&quot;     # values in columns -&gt; new column called item
+  #  )
+purchases</code></pre>
+<pre><code>## # A tibble: 5 × 2
+##   customer_id item        
+##         &lt;dbl&gt; &lt;chr&gt;       
+## 1           1 bread       
+## 2           1 milk        
+## 3           1 banana      
+## 4           2 milk        
+## 5           2 toilet paper</code></pre>
+<pre class="r"><code>url7 &lt;- &#39;https://raw.githubusercontent.com/gnunez2020/tidyverse/main/prices.csv&#39;
+prices &lt;- read_csv(url7)</code></pre>
+<pre><code>## Rows: 5 Columns: 2
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (1): item
+## dbl (1): price
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>names(prices)</code></pre>
+<pre><code>## [1] &quot;item&quot;  &quot;price&quot;</code></pre>
+<pre class="r"><code>purchases %&gt;%
+  left_join(prices)</code></pre>
+<pre><code>## Joining, by = &quot;item&quot;</code></pre>
+<pre><code>## # A tibble: 5 × 3
+##   customer_id item         price
+##         &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt;
+## 1           1 bread         1   
+## 2           1 milk          0.8 
+## 3           1 banana        0.15
+## 4           2 milk          0.8 
+## 5           2 toilet paper  3</code></pre>
+<pre class="r"><code># purchases %&gt;%
+#  pivot_wider(
+#    names_from = item_no,
+#    values_from = item
+#  )</code></pre>
+</div>
+<div id="case-study-approval-rating-of-donald-trump" class="section level2">
+<h2>Case study: Approval rating of Donald Trump</h2>
+<pre class="r"><code>url8 &lt;- &#39;https://raw.githubusercontent.com/gnunez2020/tidyverse/main/trump.csv&#39;
+trump &lt;- read_csv(url8)</code></pre>
+<pre><code>## Rows: 2702 Columns: 4
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr  (1): subgroup
+## dbl  (2): approval, disapproval
+## date (1): date
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>names(trump)</code></pre>
+<pre><code>## [1] &quot;subgroup&quot;    &quot;date&quot;        &quot;approval&quot;    &quot;disapproval&quot;</code></pre>
+<pre class="r"><code># Pivot
+trump_longer &lt;- trump %&gt;%
+  pivot_longer(
+    cols = c(approval, disapproval),
+    names_to = &quot;rating_type&quot;,
+    values_to = &quot;rating_value&quot;
+  )
+trump_longer</code></pre>
+<pre><code>## # A tibble: 5,404 × 4
+##    subgroup date       rating_type rating_value
+##    &lt;chr&gt;    &lt;date&gt;     &lt;chr&gt;              &lt;dbl&gt;
+##  1 Voters   2020-10-04 approval            44.7
+##  2 Voters   2020-10-04 disapproval         52.2
+##  3 Adults   2020-10-04 approval            43.2
+##  4 Adults   2020-10-04 disapproval         52.6
+##  5 Adults   2020-10-03 approval            43.2
+##  6 Adults   2020-10-03 disapproval         52.6
+##  7 Voters   2020-10-03 approval            45.0
+##  8 Voters   2020-10-03 disapproval         51.7
+##  9 Adults   2020-10-02 approval            43.3
+## 10 Adults   2020-10-02 disapproval         52.4
+## # … with 5,394 more rows</code></pre>
+<pre class="r"><code># Plot
+ggplot(trump_longer, 
+       aes(x = date, y = rating_value, 
+           color = rating_type, group = rating_type)) +
+  geom_line() +
+  facet_wrap(~ subgroup) +
+  scale_color_manual(values = c(&quot;darkgreen&quot;, &quot;orange&quot;)) + 
+  labs( 
+    x = &quot;Date&quot;, y = &quot;Rating&quot;, 
+    color = NULL, 
+    title = &quot;How (un)popular is Donald Trump?&quot;, 
+    subtitle = &quot;Estimates based on polls of all adults and polls of likely/registered voters&quot;, 
+    caption = &quot;Source: FiveThirtyEight modeling estimates&quot; 
+  ) + 
+  theme_minimal() +
+  theme(legend.position = &quot;bottom&quot;)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+</div>
