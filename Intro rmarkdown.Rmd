@@ -278,7 +278,7 @@ output:
 # Figures
 
 ## Embed Images
-image: ![](.jpeg){width=50%}
+> image: !
 ##Added {width=50%} to make it half the page, but don’t have to use this
 
 
