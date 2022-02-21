@@ -32,7 +32,7 @@ cat_lovers %>%
 
 # Fix
 ```{r}
-glimpse(cat_lovers)
+view(cat_lovers)
 ```
 
 
@@ -59,7 +59,7 @@ cat_lovers %>%
   summarise(mean_cats = mean(number_of_cats))
 ```
 
-# Data Types in R
+# Data Types in R - Coersion
 
 ## logical
 ### boolean values TRUE and FALSE

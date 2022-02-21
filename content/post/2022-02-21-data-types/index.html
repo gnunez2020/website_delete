@@ -54,12 +54,7 @@ cat_lovers &lt;- read_csv(urlcat)</code></pre>
 </div>
 <div id="fix" class="section level1">
 <h1>Fix</h1>
-<pre class="r"><code>glimpse(cat_lovers)</code></pre>
-<pre><code>## Rows: 60
-## Columns: 3
-## $ name           &lt;chr&gt; &quot;Bernice Warren&quot;, &quot;Woodrow Stone&quot;, &quot;Willie Bass&quot;, &quot;Tyro…
-## $ number_of_cats &lt;chr&gt; &quot;0&quot;, &quot;0&quot;, &quot;1&quot;, &quot;3&quot;, &quot;3&quot;, &quot;2&quot;, &quot;1&quot;, &quot;1&quot;, &quot;0&quot;, &quot;0&quot;, &quot;0&quot;, …
-## $ handedness     &lt;chr&gt; &quot;left&quot;, &quot;left&quot;, &quot;left&quot;, &quot;left&quot;, &quot;left&quot;, &quot;left&quot;, &quot;left&quot;,…</code></pre>
+<pre class="r"><code>view(cat_lovers)</code></pre>
 <pre class="r"><code>cat_lovers %&gt;%
   mutate(number_of_cats = case_when(
     name == &quot;Ginger Clark&quot; ~ 2,
@@ -87,8 +82,8 @@ cat_lovers &lt;- read_csv(urlcat)</code></pre>
 ##       &lt;dbl&gt;
 ## 1     0.833</code></pre>
 </div>
-<div id="data-types-in-r" class="section level1">
-<h1>Data Types in R</h1>
+<div id="data-types-in-r---coersion" class="section level1">
+<h1>Data Types in R - Coersion</h1>
 <div id="logical" class="section level2">
 <h2>logical</h2>
 <div id="boolean-values-true-and-false" class="section level3">
