@@ -6,3 +6,173 @@ slug: data-classes
 categories: []
 tags: []
 ---
+
+```{r}
+library(tidyverse)
+```
+# Cat lovers
+```{r}
+urlcat <- 'https://raw.githubusercontent.com/gnunez2020/tidyverse/main/cat-lovers.csv'
+cat_lovers <- read_csv(urlcat)
+names(cat_lovers)
+```
+# Hotels
+```{r}
+urlhotel <- 'https://raw.githubusercontent.com/gnunez2020/tidyverse/main/hotels.csv'
+hotels <- read_csv(urlhotel)
+names(hotels)
+```
+
+# Classes
+##The class attribute relates to the S3 class of an object which determines its behaviour
+###Examples: factors, dates, and data frames
+
+# Factors
+##R uses factors to handle categorical variables, variables that have a fixed and known set of possible values
+```{r}
+x <- factor(c("BS", "MS", "PhD", "MS"))
+x
+
+typeof(x)
+class(x)
+glimpse(x)
+as.integer(x)
+
+```
+
+# Dates
+##We can think of dates like an integer (the number of days since the origin, 1 Jan 1970) and an integer (the origin) glued together
+```{r}
+y <- as.Date("2020-01-01")
+y
+
+typeof(y)
+class(y)
+as.integer(y)
+as.integer(y) / 365 # roughly 50 yrs
+
+```
+
+# Data frames
+##We can think of data frames like like vectors of equal length glued together
+```{r}
+df <- data.frame(x = 1:2, y = 3:4)
+df
+typeof(df)
+class(df)
+
+```
+
+# Lists
+##Lists are a generic vector container vectors of any type can go in them
+```{r}
+l <- list(
+  x = 1:4,
+  y = c("hi", "hello", "jello"),
+  z = c(TRUE, FALSE)
+)
+l
+```
+
+# Lists and data frames
+##A data frame is a special list containing vectors of equal length
+##When we use the pull() function, we extract a vector from the data frame
+```{r}
+df
+df %>%
+  pull(y)
+```
+# Working with factors
+
+# Read data in as character strings
+```{r}
+glimpse(cat_lovers)
+
+ggplot(cat_lovers, mapping = aes(x = handedness)) +
+  geom_bar()
+
+cat_lovers %>%
+  mutate(handedness = fct_infreq(handedness)) %>%
+  ggplot(mapping = aes(x = handedness)) +
+  geom_bar()
+```
+
+# Come for the functionality
+##Factors are useful when you have true categorical data and you want to override the ordering of character vectors to improve display
+##They are also useful in modeling scenarios
+##The forcats package provides a suite of useful tools that solve common problems with factors
+
+# Working with dates
+##lubridate is the tidyverse-friendly package that makes dealing with dates a little easier
+##It's not one of the core tidyverse packages, hence it's installed with install.packages("tidyverse) but it's not loaded with it, and needs to be explicitly loaded with library(lubridate)
+
+```{r}
+hotels %>%
+  select(starts_with("arrival_"))
+# Calculate and visualise the number of bookings on any given arrival date.
+```
+
+## Step 1. Construct dates
+```{r}
+library(glue)
+hotels %>%
+  mutate(
+    arrival_date = glue("{arrival_date_year} {arrival_date_month} {arrival_date_day_of_month}")
+    ) %>% 
+  relocate(arrival_date)
+```
+
+## Step 2. Count bookings per date
+```{r}
+hotels %>%
+  mutate(arrival_date = glue("{arrival_date_year} {arrival_date_month} {arrival_date_day_of_month}")) %>%
+  count(arrival_date)
+```
+
+## Step 3. Visualise bookings per date
+```{r}
+hotels %>%
+  mutate(arrival_date = glue("{arrival_date_year} {arrival_date_month} {arrival_date_day_of_month}")) %>%
+  count(arrival_date) %>%
+  ggplot(aes(x = arrival_date, y = n, group = 1)) +
+  geom_line()
+```
+
+## Error
+##Why does the plot start with August when we know our data start in July? And why does 10 August come after 1 August?
+
+## Step 1. REVISED Construct dates "as dates"
+```{r}
+library(lubridate)
+hotels %>%
+  mutate(
+    arrival_date = ymd(glue("{arrival_date_year} {arrival_date_month} {arrival_date_day_of_month}"))
+    ) %>% 
+  relocate(arrival_date)
+```
+
+## Step 2. Count bookings per date
+```{r}
+hotels %>%
+  mutate(arrival_date = ymd(glue("{arrival_date_year} {arrival_date_month} {arrival_date_day_of_month}"))) %>% 
+  count(arrival_date)
+```
+
+## Step 3a. Visualise bookings per date
+```{r}
+hotels %>%
+  mutate(arrival_date = ymd(glue("{arrival_date_year} {arrival_date_month} {arrival_date_day_of_month}"))) %>% 
+  count(arrival_date) %>%
+  ggplot(aes(x = arrival_date, y = n, group = 1)) +
+  geom_line()
+```
+
+## Step 3b. Visualise using a smooth curve
+```{r}
+hotels %>%
+  mutate(arrival_date = ymd(glue("{arrival_date_year} {arrival_date_month} {arrival_date_day_of_month}"))) %>% 
+  count(arrival_date) %>%
+  ggplot(aes(x = arrival_date, y = n, group = 1)) +
+  geom_smooth()
+```
+
