@@ -21,7 +21,7 @@ tags: []
 ## x dplyr::lag()    masks stats::lag()</code></pre>
 <div id="case-study-religion-and-income" class="section level1">
 <h1>Case study: Religion and income</h1>
-<pre class="r"><code>library(readxl)
+<pre class="r"><code>#library(readxl)
 rel_inc &lt;- read_csv(&quot;https://raw.githubusercontent.com/gnunez2020/tidyverse/main/relig-income.csv&quot;)</code></pre>
 <pre><code>## Rows: 12 Columns: 6
 ## ── Column specification ────────────────────────────────────────────────────────
@@ -126,14 +126,15 @@ rel_inc &lt;- read_csv(&quot;https://raw.githubusercontent.com/gnunez2020/tidyve
 </div>
 <div id="barplot" class="section level2">
 <h2>Barplot</h2>
-<pre class="r"><code>#ggplot(rel_inc_long, aes(y = religion, x = frequency)) +
-  #geom_col()</code></pre>
+<pre class="r"><code>ggplot(rel_inc_long, aes(y = religion, x = n)) +
+  geom_col()</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 </div>
 <div id="recode-religion" class="section level2">
 <h2>Recode religion</h2>
 <pre class="r"><code>rel_inc_long &lt;- rel_inc_long %&gt;%
   mutate(religion = case_when(
-    religion == &quot;Evangelical Protestant&quot;           ~ &quot;Ev. Protestant&quot;,
+   religion == &quot;Evangelical Protestant&quot;           ~ &quot;Ev. Protestant&quot;,
     religion == &quot;Historically Black Protestant&quot;    ~ &quot;Hist. Black Protestant&quot;,
     religion == &#39;Unaffiliated (religious &quot;nones&quot;)&#39; ~ &quot;Unaffiliated&quot;,
     TRUE                                           ~ religion
@@ -161,47 +162,64 @@ rel_inc_long</code></pre>
 </div>
 <div id="add-income" class="section level2">
 <h2>Add income</h2>
-<blockquote>
-<pre class="r"><code>#ggplot(rel_inc_long, aes(y = religion, x = frequency, fill = income)) + 
- #geom_col()</code></pre>
-</blockquote>
+<pre class="r"><code> ggplot(rel_inc_long, aes(y = religion, x = n, fill = income)) + 
+  geom_col()</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 </div>
 <div id="fill-bars" class="section level2">
 <h2>Fill bars</h2>
-<pre class="r"><code>#ggplot(rel_inc_long, aes(y = religion, x = frequency, fill = income)) +
-  #geom_col(position = &quot;fill&quot;)</code></pre>
+<pre class="r"><code>ggplot(rel_inc_long, aes(y = religion, x = n, fill = income)) +
+  geom_col(position = &quot;fill&quot;)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 </div>
 <div id="change-colors" class="section level2">
 <h2>Change colors</h2>
-<pre class="r"><code>#ggplot(rel_inc_long, aes(y = religion, x = frequency, fill = income)) +
-  #geom_col(position = &quot;fill&quot;) +
-  #scale_fill_viridis_d()</code></pre>
+<pre class="r"><code>ggplot(rel_inc_long, aes(y = religion, x = n, fill = income)) +
+  geom_col(position = &quot;fill&quot;) +
+  scale_fill_viridis_d()</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 </div>
 <div id="change-theme" class="section level2">
 <h2>Change theme</h2>
-<pre class="r"><code>#ggplot(rel_inc_long, aes(y = religion, x = frequency, fill = income)) +
-  #geom_col(position = &quot;fill&quot;) +
-  #scale_fill_viridis_d() +
-  #theme_minimal()</code></pre>
+<pre class="r"><code>ggplot(rel_inc_long, aes(y = religion, x = n, fill = income)) +
+  geom_col(position = &quot;fill&quot;) +
+  scale_fill_viridis_d() +
+  theme_minimal()</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 </div>
 <div id="move-legend-to-the-bottom" class="section level2">
 <h2>Move legend to the bottom</h2>
-<pre class="r"><code>#ggplot(rel_inc_long, aes(y = religion, x = frequency, fill = income)) +
-  #geom_col(position = &quot;fill&quot;) +
- # scale_fill_viridis_d() +
-  #theme_minimal() +
-  #theme(legend.position = &quot;bottom&quot;)</code></pre>
+<pre class="r"><code>ggplot(rel_inc_long, aes(y = religion, x = n, fill = income)) +
+  geom_col(position = &quot;fill&quot;) +
+  scale_fill_viridis_d() +
+  theme_minimal() +
+  theme(legend.position = &quot;bottom&quot;)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
 </div>
 <div id="legend-adjustments" class="section level2">
 <h2>Legend adjustments</h2>
-<pre class="r"><code>#ggplot(rel_inc_long, aes(y = religion, x = frequency, fill = income)) +
-  #geom_col(position = &quot;fill&quot;) +
-  #scale_fill_viridis_d() +
-  #theme_minimal() +
-  #theme(legend.position = &quot;bottom&quot;) +
-  #guides(fill = guide_legend(nrow = 2, byrow = TRUE))</code></pre>
+<pre class="r"><code>ggplot(rel_inc_long, aes(y = religion, x = n, fill = income)) +
+  geom_col(position = &quot;fill&quot;) +
+  scale_fill_viridis_d() +
+  theme_minimal() +
+  theme(legend.position = &quot;bottom&quot;) +
+  guides(fill = guide_legend(nrow = 2, byrow = TRUE))</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
 </div>
 <div id="fix-labels" class="section level2">
 <h2>Fix labels</h2>
+<pre class="r"><code>ggplot(rel_inc_long, aes(y = religion, x = n, fill = income)) +
+  geom_col(position = &quot;fill&quot;) +
+  scale_fill_viridis_d() +
+   theme_minimal() +
+  theme(legend.position = &quot;bottom&quot;) +
+  guides(fill = guide_legend(nrow = 2, byrow = TRUE)) +
+  labs(
+    x = &quot;Proportion&quot;, y = &quot;&quot;, 
+    title = &quot;Income distribution by religious group&quot;, 
+    subtitle = &quot;Source: Pew Research Center, Religious Landscape Study&quot;, 
+    fill = &quot;Income&quot; 
+    )</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 </div>
 </div>

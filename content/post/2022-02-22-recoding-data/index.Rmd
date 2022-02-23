@@ -12,7 +12,7 @@ library(tidyverse)
 
 # Case study: Religion and income
 ```{r}
-library(readxl)
+#library(readxl)
 rel_inc <- read_csv("https://raw.githubusercontent.com/gnunez2020/tidyverse/main/relig-income.csv")
 ```
 
@@ -71,15 +71,15 @@ rel_inc_long <- rel_inc %>%
 
 ## Barplot
 ```{r}
-#ggplot(rel_inc_long, aes(y = religion, x = frequency)) +
-  #geom_col()
+ggplot(rel_inc_long, aes(y = religion, x = n)) +
+  geom_col()
 ```
 
 ## Recode religion
 ```{r}
 rel_inc_long <- rel_inc_long %>%
   mutate(religion = case_when(
-    religion == "Evangelical Protestant"           ~ "Ev. Protestant",
+   religion == "Evangelical Protestant"           ~ "Ev. Protestant",
     religion == "Historically Black Protestant"    ~ "Hist. Black Protestant",
     religion == 'Unaffiliated (religious "nones")' ~ "Unaffiliated",
     TRUE                                           ~ religion
@@ -94,52 +94,66 @@ rel_inc_long <- rel_inc_long %>%
 ```
 
 ## Add income
->```{r}
- #ggplot(rel_inc_long, aes(y = religion, x = frequency, fill = income)) + 
-  #geom_col()
+```{r}
+ ggplot(rel_inc_long, aes(y = religion, x = n, fill = income)) + 
+  geom_col()
 ```
 
 ## Fill bars
 ```{r}
-#ggplot(rel_inc_long, aes(y = religion, x = frequency, fill = income)) +
-  #geom_col(position = "fill")
+ggplot(rel_inc_long, aes(y = religion, x = n, fill = income)) +
+  geom_col(position = "fill")
 ```
 
 ## Change colors
 ```{r}
-#ggplot(rel_inc_long, aes(y = religion, x = frequency, fill = income)) +
-  #geom_col(position = "fill") +
-  #scale_fill_viridis_d()
+ggplot(rel_inc_long, aes(y = religion, x = n, fill = income)) +
+  geom_col(position = "fill") +
+  scale_fill_viridis_d()
 ```
 
 ## Change theme
 ```{r}
-#ggplot(rel_inc_long, aes(y = religion, x = frequency, fill = income)) +
-  #geom_col(position = "fill") +
-  #scale_fill_viridis_d() +
-  #theme_minimal()
+ggplot(rel_inc_long, aes(y = religion, x = n, fill = income)) +
+  geom_col(position = "fill") +
+  scale_fill_viridis_d() +
+  theme_minimal()
 ```
 
 ## Move legend to the bottom
 ```{r}
-#ggplot(rel_inc_long, aes(y = religion, x = frequency, fill = income)) +
-  #geom_col(position = "fill") +
- # scale_fill_viridis_d() +
-  #theme_minimal() +
-  #theme(legend.position = "bottom")
+ggplot(rel_inc_long, aes(y = religion, x = n, fill = income)) +
+  geom_col(position = "fill") +
+  scale_fill_viridis_d() +
+  theme_minimal() +
+  theme(legend.position = "bottom")
 ```
 
 ## Legend adjustments
 ```{r}
-#ggplot(rel_inc_long, aes(y = religion, x = frequency, fill = income)) +
-  #geom_col(position = "fill") +
-  #scale_fill_viridis_d() +
-  #theme_minimal() +
-  #theme(legend.position = "bottom") +
-  #guides(fill = guide_legend(nrow = 2, byrow = TRUE))
+ggplot(rel_inc_long, aes(y = religion, x = n, fill = income)) +
+  geom_col(position = "fill") +
+  scale_fill_viridis_d() +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  guides(fill = guide_legend(nrow = 2, byrow = TRUE))
 ```
 
 ## Fix labels
+```{r}
+ggplot(rel_inc_long, aes(y = religion, x = n, fill = income)) +
+  geom_col(position = "fill") +
+  scale_fill_viridis_d() +
+   theme_minimal() +
+  theme(legend.position = "bottom") +
+  guides(fill = guide_legend(nrow = 2, byrow = TRUE)) +
+  labs(
+    x = "Proportion", y = "", 
+    title = "Income distribution by religious group", 
+    subtitle = "Source: Pew Research Center, Religious Landscape Study", 
+    fill = "Income" 
+    )
+```
 
 
 
